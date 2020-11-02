@@ -1,0 +1,37 @@
+Private Sub CommandButton1_Click()
+    Dim i As Integer
+    Dim pass As String
+    pass = "Ahihi"
+    For i = 1 To Sheet1.Range("A5:B8").Rows.Count
+        Worksheets.Add.Name = Cells(4 + i, 1).Value
+    Next i
+End Sub
+
+// code trên để tạo các sheet
+// code bên dưới để copy thông tin vào các sheet đã được tạo
+
+Private Sub CommandButton1_Click()
+    Dim i, j As Integer
+    Dim table1 As Range
+    Dim table2 As Range
+    Set table1 = Sheet2.Range("A5:F9")
+    Set table2 = Sheet1.Range("A5:B8")
+    ReDim lineIndexInSheets(1 To table2.Rows.Count) As Integer
+    
+    For i = 1 To table2.Rows.Count
+        lineIndexInSheets(i) = 2
+    Next i
+    
+    For i = 1 To table2.Rows.Count
+        Sheet2.Range("A4:F4").Copy Worksheets(table2.Cells(i, 1).Value).Range("A1:F1")
+    Next i
+    
+    For i = 1 To table1.Rows.Count
+        For j = 1 To table2.Rows.Count
+            If InStr(table2.Cells(j, 2).Value, table1.Cells(i, 5).Value) <> 0 Then
+                Sheet2.Range(table1.Cells(i, 1), table1.Cells(i, 6)).Copy Worksheets(table2.Cells(j, 1).Value).Cells(lineIndexInSheets(j), 1)
+                lineIndexInSheets(j) = lineIndexInSheets(j) + 1
+            End If
+        Next j
+    Next i
+End Sub
